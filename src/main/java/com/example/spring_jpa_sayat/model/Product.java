@@ -1,14 +1,17 @@
 package com.example.spring_jpa_sayat.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.net.ProtocolFamily;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "products")
 public class Product {
     @Id
@@ -23,4 +26,5 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Value> values;
+
 }

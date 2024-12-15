@@ -1,5 +1,6 @@
 package com.example.spring_jpa_sayat.dto;
 
+import com.example.spring_jpa_sayat.model.Category;
 import com.example.spring_jpa_sayat.model.Option;
 import com.example.spring_jpa_sayat.model.Product;
 import com.example.spring_jpa_sayat.model.Value;
@@ -12,13 +13,14 @@ import java.util.Map;
 
 @Component
 public class ProductMapper {
-    public ProductFullDto toFullDto(Product product) {
+    public ProductFullDto toFullDto(Product product){
         ProductFullDto productDto = new ProductFullDto();
         productDto.setId(product.getId());
         productDto.setName(product.getName());
-        productDto.setPrice(productDto.getPrice());
+        productDto.setPrice(product.getPrice());
         productDto.setCategoryName(product.getCategory().getName());
         Map<String, String> result = new LinkedHashMap<>();
+
 
         for (Option option : product.getCategory().getOptions()) {
             Value foundValue = null;
@@ -48,12 +50,23 @@ public class ProductMapper {
         return productShortDto;
     }
 
-    public ProductShortDto toShortDto(List<Product> products) {
+    public List<ProductShortDto> toShortDto(List<Product> products) {
         List<ProductShortDto> productShortDtoList = new ArrayList<>();
         for (Product product : products) {
             ProductShortDto shortDto = toShortDto(product);
             productShortDtoList.add(shortDto);
         }
         return productShortDtoList;
+    }
+
+    public Product fromCreate(ProductCreateDto productCreateDto) {
+        Category category = new Category();
+        category.setId(productCreateDto.getCategoryId());
+
+        return Product.builder()
+                .name(productCreateDto.getName())
+                .price(productCreateDto.getPrice())
+                .category(category)
+                .build();
     }
 }
