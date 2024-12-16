@@ -23,6 +23,7 @@ public class Category {
     @JsonIgnore
     private List<Product> products;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Option> options;
 }

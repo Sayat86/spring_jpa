@@ -9,16 +9,36 @@ import java.util.List;
 
 @Component
 public class CategoryMapper {
-    public Category fromCreate(CategoryCreateDto categoryCreateDto) {
-        List<Option> options = new ArrayList<>();
-        for (String stringOptionName : categoryCreateDto.getOptions()) {
-            Option option = new Option();
-            option.setName(stringOptionName);
-            options.add(option);
+    public Category fromCreate(CategoryCreateDto createDto) {
+        Category category = new Category();
+        category.setName(createDto.getName());
+
+        List<Option> options = createDto.getOptions().stream()
+                .map(optionName -> {
+                    Option option = new Option();
+                    option.setName(optionName);
+                    option.setCategory(category);
+                    return option;
+                })
+                .toList();
+        category.setOptions(options);
+        return category;
+    }
+
+    //Category -> CategoryWithOptionsDto
+    public CategoryWithOptionsDto toWithOptionsDto(Category category) {
+        CategoryWithOptionsDto categoryWithOptionsDto = new CategoryWithOptionsDto();
+        categoryWithOptionsDto.setId(category.getId());
+        categoryWithOptionsDto.setName(category.getName());
+
+        List<OptionShortDto> optionShortDtoList = new ArrayList<>();
+        for (Option option : category.getOptions()) {
+            OptionShortDto optionShortDto = new OptionShortDto();
+            optionShortDto.setId(option.getId());
+            optionShortDto.setName(option.getName());
+            optionShortDtoList.add(optionShortDto);
         }
-        return Category.builder()
-                .name(categoryCreateDto.getName())
-                .options(options)
-                .build();
+        categoryWithOptionsDto.setOptions(optionShortDtoList);
+        return categoryWithOptionsDto;
     }
 }

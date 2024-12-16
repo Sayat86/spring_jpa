@@ -2,11 +2,8 @@ package com.example.spring_jpa_sayat.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class CategoryWithOptionsDto {
+public class OptionShortDto {
     private int id;
     private String name;
-    private List<OptionShortDto> options;
 }
